@@ -1,14 +1,19 @@
-import ReactFlow, { Background } from "react-flow-renderer";
+import React, { useState } from 'react';
+import ReactFlow, { ReactFlowProvider, Background, OnLoadParams, Elements, BackgroundVariant } from "react-flow-renderer";
 import Head from "next/head";
+
+import Controls from '../components/Controls';
 import styles from "../styles/Home.module.css";
 
+const initialElements = [
+  { id: '1', data: { label: 'Node 1' }, position: { x: 100, y: 100 } },
+  { id: '2', data: { label: 'Node 2' }, position: { x: 100, y: 200 } },
+  { id: 'e1-2', source: '1', target: '2' },
+];
+
 export default function Home() {
-  const elements = [
-    { id: '1', data: { label: 'Node 1' }, position: { x: 250, y: 5 } },
-    // you can also pass a React component as a label
-    { id: '2', data: { label: <div>Node 2</div> }, position: { x: 100, y: 100 } },
-    { id: 'e1-2', source: '1', target: '2', animated: true },
-  ];
+  const [rfInstance, setRfInstance] = useState<OnLoadParams>();
+  const [elements, setElements] = useState<Elements>(initialElements);
 
   return (
     <div className={styles.container}>
@@ -21,13 +26,17 @@ export default function Home() {
       <header className={styles.title}>React Flow Example</header>
 
       <div className={styles.main}>
-        <ReactFlow
-          elements={elements}
-          snapToGrid={true}
-          snapGrid={[15, 15]}
-        >
-          <Background color="#aaa" gap={16} />
-        </ReactFlow>
+        <ReactFlowProvider>
+          <ReactFlow
+            elements={elements}
+            snapToGrid={true}
+            snapGrid={[15, 15]}
+            onLoad={setRfInstance}
+          >
+            <Controls rfInstance={rfInstance} setElements={setElements} />
+            <Background variant={BackgroundVariant.Lines} />
+          </ReactFlow>
+        </ReactFlowProvider>
       </div>
     </div>
   );
