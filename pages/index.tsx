@@ -1,4 +1,4 @@
-import ReactFlow from "react-flow-renderer";
+import ReactFlow, { Background } from "react-flow-renderer";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 
@@ -21,7 +21,13 @@ export default function Home() {
       <header className={styles.title}>React Flow Example</header>
 
       <div className={styles.main}>
-        <ReactFlow elements={elements} />
+        <ReactFlow
+          elements={elements}
+          snapToGrid={true}
+          snapGrid={[15, 15]}
+        >
+          <Background color="#aaa" gap={16} />
+        </ReactFlow>
       </div>
     </div>
   );
